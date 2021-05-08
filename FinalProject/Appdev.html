@@ -1,0 +1,45 @@
+
+<!DOCTYPE>
+<html>
+<head>
+<title>Application development project</title>
+</head>
+<script>
+function getdata() {
+	fetch('http://www.cc.puv.fi/~e2000587/record.txt')
+		.then(r => r.text())
+		.then(data => dispdata(data))
+};
+function dispdata(d) {
+	var ctt = document.getElementById("data");
+	var can = document.getElementById("chart");
+	var ctx = can.getContext('2d');
+	ctx.lineWidth = 10; //set the line width of drawing
+	var lines = d.split("\n"); //split whole text into lines
+	var i = 0;
+	while(typeof lines[0]!="undefined") {
+		var line = lines.shift(); /
+		var split = line.split(' '); //split a line by ' '
+		ctt.innerHTML += line + "<br/>"; //write a line in <p>
+
+		ctx.strokeStyle = 'red';
+		ctx.beginPath();
+		ctx.moveTo(i*40+10, 400 - 10);
+		ctx.lineTo(i*40+10, 400 - 10 - parseInt(split[2])*5); //draw min
+		ctx.stroke();
+
+		ctx.strokeStyle = 'cyan';
+		ctx.beginPath();
+		ctx.moveTo(i*40+30, 400-10);
+		ctx.lineTo(i*40+30, 400-10-parseInt(split[3])*5); //draw max
+		ctx.stroke();
+		
+		i++;		
+	}
+}
+</script>
+<body onload=getdata()>
+<p id="data"></p>
+<canvas id="chart" height=600 width=1200 style="border:solid 2px blue"></canvas>
+</body>
+</html>
